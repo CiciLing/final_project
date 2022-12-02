@@ -152,4 +152,3 @@ def main():
     E.evolve(5000000, dom=100, sync=10000, status=10, time_limit=60)
 
 main()
-

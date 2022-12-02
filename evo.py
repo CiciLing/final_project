@@ -132,8 +132,7 @@ class Environment:
                 df = pd.DataFrame(final[1:], columns=final[0])
                 df_evo = pd.concat([df_evo,df])
                 #print(df)
-                with open('solutions.dat', 'wb') as file:
-                    pickle.dump(df, file)
+
                 # print("Iteration          :", i)
                 # print("Population size    :", self.size())
                 # print("Elapsed Time (Sec) :", elapsed, "\n\n\n")
