@@ -7,16 +7,6 @@ import dash_daq as daq
 import json
 
 
-result = []
-with (open("solutions.dat", "rb")) as openfile:
-    while True:
-        try:
-            result.append(pickle.load(openfile))
-        except EOFError:
-            break
-
-objective_num = list(result[0].keys())
-print(objective_num[0])
 
 
 
@@ -60,18 +50,35 @@ app.layout = html.Div([
         # id="run_time", type="number", placeholder="Input your expected run time for evo(in sec)",
         # min=5, max=600, step=3, size = '100'),
         # ## change the x and y axis
-
         dcc.Graph(id="scatter", style={'width':'60vw', 'height':'60vh'}),
+        dcc.Interval(
+            id='interval-component',
+            interval=1*1000, # in milliseconds
+            n_intervals=0
+        ),
+        html.Div(id='check_refresh', style={'textAlign': 'center', 'fontWeight': 'bold'})
 ])
 
 @app.callback(
     Output("scatter", "figure"),
+    Output('check_refresh','children'),
     Input("objective_x", "value"),
     Input("objective_y", "value"),
+    Input('interval-component', 'n_intervals')
 )
 
 
-def data_selector(objective_x,objective_y):
+def data_selector(objective_x,objective_y, n):
+    result = []
+    with (open("solutions.dat", "rb")) as openfile:
+        while True:
+            try:
+                result.append(pickle.load(openfile))
+            except EOFError:
+                break
+
+    objective_num = list(result[0].keys())
+
     score_x = []
     score_y = []
     for ob_tu in range(len(objective_num)):
@@ -81,7 +88,10 @@ def data_selector(objective_x,objective_y):
             if objective_num[ob_tu][ob][0] == objective_y:
                 score_y.append(objective_num[ob_tu][ob][1])
     fig = px.scatter(x = score_x, y = score_y)
-    return fig
+    fig.update_layout(title='Objective Tradeoff',
+                       xaxis_title=objective_x,
+                       yaxis_title=objective_y)
+    return fig, 'it ran {} times'.format(n)
 
 
 

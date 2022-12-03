@@ -84,7 +84,7 @@ class Environment:
         agent_names = list(self.agents.keys())
 
         i = 0
-        while i < n and self.size()>0 and (time_limit is None or elapsed < time_limit):
+        while i < n and self.size() > 0 and (time_limit is None or elapsed < time_limit):
 
             pick = rnd.choice(agent_names)
             self.run_agent(pick)
@@ -100,12 +100,14 @@ class Environment:
                 except Exception as e:
                     print(e)
 
-                # Remove the dominated solutions
+                # # Remove the dominated solutions
                 self.remove_dominated()
 
                 # Resave the non-dominated solutions
                 with open('solutions.dat', 'wb') as file:
+                    print(len(self.pop))
                     pickle.dump(self.pop, file)
+
 
 
             if i % dom == 0:
@@ -131,7 +133,7 @@ class Environment:
                 arr = np.array(list(self.pop.values()))
                 df = pd.DataFrame(final[1:], columns=final[0])
                 df_evo = pd.concat([df_evo,df])
-                #print(df)
+                print(df)
 
                 # print("Iteration          :", i)
                 # print("Population size    :", self.size())

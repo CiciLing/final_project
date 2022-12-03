@@ -149,6 +149,6 @@ def main():
     sol = np.random.choice([0, 1], size=(43, 17))
     E.add_solution(sol)
     # run the evolver
-    E.evolve(5000000, dom=100, sync=10000, status=10, time_limit=60)
+    E.evolve(5000000, dom=100, sync=1, status=10, time_limit=1200)
 
 main()
